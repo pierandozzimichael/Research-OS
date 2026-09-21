@@ -18,6 +18,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - name: Install locked dependencies for the indexer
+        run: pnpm install --frozen-lockfile
       - name: Build safe demo archive
         shell: pwsh
         run: ./scripts/package-lab-release.ps1 -ArchiveFormat all
