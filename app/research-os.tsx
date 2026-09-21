@@ -721,7 +721,6 @@ export default function ResearchOS() {
   useEffect(() => {
     let cancelled = false;
     if(!activeProjectId){
-      setProjectLoading(true);
       return()=>{cancelled=true;};
     }
     fetch(`/api/project-snapshot?id=${encodeURIComponent(activeProjectId)}`, {cache:"no-store"})
