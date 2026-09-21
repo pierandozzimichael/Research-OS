@@ -4,12 +4,22 @@ import path from "node:path";
 
 const root = process.cwd();
 const node = process.execPath;
+// Node 22.13 is the minimum supported runtime. It can execute the checked-in
+// TypeScript helper modules, but needs the explicit strip-types opt-in. Pass it
+// through the bounded child processes so CI and fresh installs behave like the
+// newer local runtime without weakening any package-manager policy.
+const childEnv = {
+  ...process.env,
+  NODE_OPTIONS: [process.env.NODE_OPTIONS, "--experimental-strip-types"]
+    .filter(Boolean)
+    .join(" "),
+};
 
 function run(label, args, timeout) {
   console.log(`\n${label}`);
   const result = spawnSync(node, args, {
     cwd: root,
-    env: process.env,
+    env: childEnv,
     stdio: "inherit",
     timeout,
   });
