@@ -36,6 +36,12 @@ function Copy-Tree([string]$Source, [string]$Destination) {
 
 try {
     Copy-Tree $root $staging
+    # These two files are safe local-only build plumbing, not private hosting
+    # state. Keep them in the public demo because vite.config.ts imports them.
+    New-Item -ItemType Directory -Force -Path (Join-Path $staging ".openai") | Out-Null
+    Copy-Item -LiteralPath (Join-Path $root ".openai\hosting.json") -Destination (Join-Path $staging ".openai\hosting.json") -Force
+    New-Item -ItemType Directory -Force -Path (Join-Path $staging "build") | Out-Null
+    Copy-Item -LiteralPath (Join-Path $root "build\sites-vite-plugin.ts") -Destination (Join-Path $staging "build\sites-vite-plugin.ts") -Force
     Copy-Item -LiteralPath (Join-Path $root "examples\demo-projects.json") -Destination (Join-Path $staging "projects.json") -Force
     Copy-Item -LiteralPath (Join-Path $root "examples\demo-vault") -Destination (Join-Path $staging "vault") -Recurse -Force
     foreach ($name in @("START_HERE.md", "CLAUDE.md", "CURRENT_STATE.md", "NEXT_ACTIONS.md", "ROADMAP.md", "TRAPS.md")) {
