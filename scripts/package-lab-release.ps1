@@ -48,9 +48,9 @@ try {
     if ($null -ne $nodeCommand) {
         Push-Location $staging
         try {
-            & $nodeCommand.Source (Join-Path $root "scripts\build-ai-index.mjs")
+            & $nodeCommand.Source --experimental-strip-types (Join-Path $root "scripts\build-ai-index.mjs")
             if ($LASTEXITCODE -ne 0) { throw "Could not build demo AI navigation." }
-            & $nodeCommand.Source (Join-Path $root "scripts\ai-readiness.mjs") --write-manifest
+            & $nodeCommand.Source --experimental-strip-types (Join-Path $root "scripts\ai-readiness.mjs") --write-manifest
             if ($LASTEXITCODE -ne 0) { throw "Could not build the demo AI manifest." }
         } finally {
             Pop-Location
