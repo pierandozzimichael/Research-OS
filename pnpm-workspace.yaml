@@ -1,7 +1,9 @@
 minimumReleaseAgeExclude:
   - '@cloudflare/workers-types@5.20260726.1'
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
-  - unrs-resolver
-  - workerd
+# pnpm 11 uses an explicit build-script allowlist. Keep this narrow so a new
+# transitive dependency cannot silently execute an install script.
+allowBuilds:
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+  workerd: true
