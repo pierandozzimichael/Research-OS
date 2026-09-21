@@ -1,0 +1,31 @@
+name: Labmate release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: windows-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build safe demo archive
+        shell: powershell
+        run: .\scripts\package-lab-release.ps1
+      - name: Upload archive artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-os-lab-release
+          path: dist/releases/*.zip
+      - name: Attach tagged release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/releases/*.zip
+          generate_release_notes: true

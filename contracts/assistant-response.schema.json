@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["answer", "citations", "ui_actions", "boundary_note"],
+  "properties": {
+    "answer": {"type": "string", "minLength": 1, "maxLength": 12000},
+    "citations": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "note"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^(PAP|IDEA|CLM|HYP|EXP|RES|MOD|ENT|TOP|SRC|METHOD|DEC|EVD|POL|PRJ)-[0-9]{3}$"},
+          "note": {"type": "string", "maxLength": 500}
+        }
+      }
+    },
+    "ui_actions": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "id", "focus_id", "depth", "steps", "reason"],
+        "properties": {
+          "type": {"type": "string", "enum": ["open_record", "show_path", "present_path"]},
+          "id": {"type": "string"},
+          "focus_id": {"type": "string"},
+          "depth": {"type": "integer", "enum": [0, 1, 2]},
+          "steps": {
+            "type": "array",
+            "maxItems": 8,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "note"],
+              "properties": {
+                "id": {"type": "string"},
+                "note": {"type": "string", "maxLength": 300}
+              }
+            }
+          },
+          "reason": {"type": "string", "maxLength": 300}
+        }
+      }
+    },
+    "boundary_note": {"type": "string", "minLength": 1, "maxLength": 500}
+  }
+}

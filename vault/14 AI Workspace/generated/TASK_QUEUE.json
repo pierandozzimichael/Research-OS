@@ -1,0 +1,15 @@
+{
+  "schema_version": "agent-task-queue-v1",
+  "project_id": "demo-evidence",
+  "generated_at": "2026-09-21T21:57:49.115Z",
+  "tasks": [
+    {
+      "id": "CLM-901",
+      "type": "claim",
+      "lane": "develop-evidence",
+      "priority": "medium",
+      "reason": "Claim is provisional.",
+      "next_action": "Map supporting and contradicting EVD anchors without upgrading the claim."
+    }
+  ]
+}

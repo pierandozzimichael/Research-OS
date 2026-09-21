@@ -1,0 +1,15 @@
+{
+  "schema_version": "frontier-review-v1",
+  "recommendation": "defer",
+  "verification_depth": "metadata",
+  "primary_source_checked": false,
+  "rationale": "The citation is relevant enough to retain, but the primary abstract or full text has not yet been checked.",
+  "reviewed_by_model": "replace-with-model-and-version",
+  "reviewed_at": "2026-07-27T12:30:00Z",
+  "checked_urls": [],
+  "candidate_claims": [],
+  "contradiction_signal": "unclear",
+  "novelty": "unclear",
+  "model_impact": "unclear",
+  "fact_check_notes": "Deferred before scientific interpretation."
+}

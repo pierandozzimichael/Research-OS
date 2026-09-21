@@ -1,0 +1,42 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import {spawn} from "node:child_process";
+import path from "node:path";
+
+const root=process.cwd();
+
+test("MCP adapter exposes bounded source-bound tools over stdio",async()=>{
+  const child=spawn(process.execPath,[path.join(root,"scripts","research-mcp.mjs")],{cwd:root,stdio:["pipe","pipe","pipe"]});
+  let stdout="",stderr="";
+  child.stdout.on("data",chunk=>{stdout+=chunk.toString("utf8");});
+  child.stderr.on("data",chunk=>{stderr+=chunk.toString("utf8");});
+  child.stdin.write(`${JSON.stringify({jsonrpc:"2.0",id:0,method:"tools/list",params:{}})}\n`);
+  child.stdin.write(`${JSON.stringify({jsonrpc:"2.0",id:1,method:"initialize",params:{protocolVersion:"2025-11-25",capabilities:{}}})}\n`);
+  child.stdin.write(`${JSON.stringify({jsonrpc:"2.0",id:2,method:"tools/list",params:{}})}\n`);
+  child.stdin.write(`${JSON.stringify({jsonrpc:"2.0",id:3,method:"tools/call",params:{name:"research_figures",arguments:{project:"apoe-rexach",id:"PAP-005"}}})}\n`);
+  child.stdin.write(`${JSON.stringify({jsonrpc:"2.0",id:4,method:"tools/call",params:{name:"research_figures",arguments:{id:"PAP-005",unexpected:true}}})}\n`);
+  child.stdin.write(`${JSON.stringify({jsonrpc:"2.0",id:5,method:"tools/call",params:{name:"research_show_in_workspace",arguments:{project:"apoe-rexach",record_id:"IDEA-003",view:"map",scope:"2-hop",expanded:true}}})}\n`);
+  child.stdin.write(`${JSON.stringify({jsonrpc:"2.0",id:6,method:"tools/call",params:{name:"research_show_in_workspace",arguments:{view:"admin"}}})}\n`);
+  child.stdin.end();
+  await new Promise((resolve,reject)=>{child.on("error",reject);child.on("close",code=>code===0?resolve():reject(new Error(`MCP server exited ${code}: ${stderr}`)));});
+  const messages=stdout.trim().split("\n").map(line=>JSON.parse(line));
+  assert.equal(messages.length,7);
+  assert.equal(messages[0].error.code,-32002);
+  assert.equal(messages[1].result.protocolVersion,"2025-11-25");
+  const tools=messages[2].result.tools;
+  assert.ok(tools.some(tool=>tool.name==="research_context"));
+  assert.ok(tools.some(tool=>tool.name==="research_change_apply"&&tool.inputSchema.required.includes("plan_hash")));
+  const result=messages[3].result.structuredContent;
+  assert.equal(result.tool,"figure.manifest");
+  assert.match(result.source.source_hash,/^[a-f0-9]{64}$/);
+  assert.equal(result.result.record.id,"PAP-005");
+  assert.equal(messages[4].result.isError,true);
+  assert.match(messages[4].result.structuredContent.error,/Unknown argument/);
+  const workspace=messages[5].result.structuredContent;
+  assert.equal(workspace.client_action.target,"embedded-browser-preferred");
+  assert.match(workspace.url,/project=apoe-rexach/);
+  assert.match(workspace.url,/record=IDEA-003/);
+  assert.match(workspace.url,/scope=2-hop/);
+  assert.equal(messages[6].result.isError,true);
+  assert.match(messages[6].result.structuredContent.error,/must be one of/);
+});

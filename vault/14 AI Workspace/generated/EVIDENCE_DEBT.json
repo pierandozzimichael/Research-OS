@@ -1,0 +1,20 @@
+{
+  "schema_version": "evidence-debt-v1",
+  "project_id": "demo-evidence",
+  "generated_at": "2026-09-21T21:57:49.115Z",
+  "claims": [
+    {
+      "id": "CLM-901",
+      "status": "provisional",
+      "supporting_evidence": 0,
+      "contradicting_evidence": 0
+    }
+  ],
+  "papers": [
+    {
+      "id": "PAP-901",
+      "status": "reviewed-abstract",
+      "review_depth": "abstract"
+    }
+  ]
+}

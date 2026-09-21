@@ -1,0 +1,11 @@
+﻿{
+    "package":  "apoe-research-os",
+    "version":  "0.1.0",
+    "profile":  "demo",
+    "generated_at":  "2026-09-21T21:57:49.2540211Z",
+    "private_data_included":  false,
+    "notes":  [
+                  "This archive contains synthetic demo records only.",
+                  "Connect a separately managed lab vault after installation; never upload unpublished vault data to a public repository."
+              ]
+}

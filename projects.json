@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "demo-evidence",
+      "name": "Demo Evidence Workspace",
+      "description": "A synthetic, non-scientific project used to tour Research OS before connecting a real lab vault.",
+      "vaultPath": "vault",
+      "workerProjectKey": "demo",
+      "literatureQueries": ["evidence graph workflow"],
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ]
+}

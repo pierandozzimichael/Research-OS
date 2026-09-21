@@ -1,0 +1,184 @@
+{
+  "schema_version": "research-os-ai-manifest-v1",
+  "application": {
+    "name": "apoe-research-os",
+    "version": "0.1.0"
+  },
+  "project_registry": {
+    "path": "projects.json",
+    "version": 1
+  },
+  "instructions": [
+    {
+      "path": "START_HERE.md",
+      "role": "portable-entrypoint",
+      "required": true
+    },
+    {
+      "path": "AGENTS.md",
+      "role": "shared-agent-contract",
+      "required": true
+    },
+    {
+      "path": "CLAUDE.md",
+      "role": "claude-adapter",
+      "required": true
+    },
+    {
+      "path": "CURRENT_STATE.md",
+      "role": "human-curated-current-state",
+      "required": true
+    },
+    {
+      "path": "NEXT_ACTIONS.md",
+      "role": "live-priority-routing",
+      "required": true
+    },
+    {
+      "path": "TRAPS.md",
+      "role": "active-negative-knowledge",
+      "required": true
+    }
+  ],
+  "projects": [
+    {
+      "id": "demo-evidence",
+      "name": "Demo Evidence Workspace",
+      "description": "A synthetic, non-scientific project used to tour Research OS before connecting a real lab vault.",
+      "vault_path": "vault",
+      "canonical_dashboard": "vault/00 Dashboard/PROJECT.md",
+      "generated_manifest": "vault/14 AI Workspace/generated/MANIFEST.json",
+      "operational_runs": "vault/14 AI Workspace/runs",
+      "literature_staging": "vault/01 Inbox/Literature"
+    }
+  ],
+  "state_boundaries": {
+    "canonical": {
+      "root": "<project.vault_path>",
+      "authority": "accepted project state; cite canonical records and evidence anchors"
+    },
+    "generated": {
+      "root": "<project.vault_path>/14 AI Workspace/generated",
+      "authority": "rebuildable navigation; never evidence"
+    },
+    "operational": {
+      "root": "<project.vault_path>/14 AI Workspace/runs",
+      "authority": "non-canonical run history and handoffs"
+    },
+    "staging": {
+      "root": "<project.vault_path>/01 Inbox/Literature",
+      "authority": "candidate material; never canonical evidence"
+    },
+    "proposals": {
+      "root": ".research-os/proposals",
+      "authority": "suggested changes awaiting validation or authorization"
+    },
+    "scratch": {
+      "root": ".research-os/scratch",
+      "authority": "disposable per-agent state; never evidence"
+    }
+  },
+  "commands": {
+    "readiness": "pnpm ai:doctor",
+    "manifest": "pnpm ai:manifest",
+    "sync": "pnpm ai:sync",
+    "freshness": "pnpm ai:check",
+    "schema_validation": "pnpm schema:validate",
+    "research_cli": "pnpm research:tool",
+    "mcp_server": "pnpm research:mcp"
+  },
+  "tools": [
+    {
+      "id": "project.brief",
+      "boundary": "read-only",
+      "mcp_name": "research_brief"
+    },
+    {
+      "id": "search.records",
+      "boundary": "read-only",
+      "mcp_name": "research_search"
+    },
+    {
+      "id": "record.get",
+      "boundary": "read-only",
+      "mcp_name": "research_record"
+    },
+    {
+      "id": "graph.explore",
+      "boundary": "read-only",
+      "mcp_name": "research_graph"
+    },
+    {
+      "id": "evidence.dossier",
+      "boundary": "read-only",
+      "mcp_name": "research_evidence"
+    },
+    {
+      "id": "work.next",
+      "boundary": "read-only",
+      "mcp_name": "research_next"
+    },
+    {
+      "id": "context.packet",
+      "boundary": "read-only",
+      "mcp_name": "research_context"
+    },
+    {
+      "id": "figure.manifest",
+      "boundary": "read-only",
+      "mcp_name": "research_figures"
+    },
+    {
+      "id": "workspace.show",
+      "boundary": "read-only",
+      "mcp_name": "research_show_in_workspace"
+    },
+    {
+      "id": "run.status",
+      "boundary": "read-only",
+      "mcp_name": "research_run_status"
+    },
+    {
+      "id": "run.event",
+      "boundary": "operational-write",
+      "mcp_name": null
+    },
+    {
+      "id": "run.cancel",
+      "boundary": "operational-write",
+      "mcp_name": "research_run_cancel"
+    },
+    {
+      "id": "change.preview",
+      "boundary": "read-only",
+      "mcp_name": "research_change_preview"
+    },
+    {
+      "id": "change.apply",
+      "boundary": "governed-write",
+      "mcp_name": "research_change_apply"
+    }
+  ],
+  "client_adapters": [
+    {
+      "client": "codex",
+      "path": ".codex/config.toml",
+      "required": false
+    },
+    {
+      "client": "claude-code",
+      "path": ".mcp.json",
+      "required": false
+    },
+    {
+      "client": "portable-skills",
+      "path": ".agents/skills",
+      "required": false
+    },
+    {
+      "client": "claude-skills",
+      "path": ".claude/skills",
+      "required": false
+    }
+  ]
+}
