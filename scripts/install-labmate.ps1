@@ -1,6 +1,7 @@
 param(
     [switch]$SkipInstall,
     [switch]$NoShortcut,
+    [switch]$SkipNodeInstall,
     [int]$CommandTimeoutSeconds = 180
 )
 
@@ -60,12 +61,28 @@ function Quote-Arg([string]$Value) {
 }
 
 $node = Resolve-CommandPath @("node.exe", "node")
+$nodeVersionHint = "Node.js 22.13 or newer is required."
+if ($null -eq $node -and -not $SkipNodeInstall) {
+    $winget = Resolve-CommandPath @("winget.exe", "winget")
+    if ($null -ne $winget) {
+        Write-Host "Node.js was not found. Installing the supported Node.js LTS with winget..." -ForegroundColor Cyan
+        Invoke-BoundedCommand -FilePath $winget -Arguments "install --id OpenJS.NodeJS.LTS --exact --source winget --accept-source-agreements --accept-package-agreements" -TimeoutSeconds $CommandTimeoutSeconds -WorkingDirectory $root
+        $machinePath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+        $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+        if ($machinePath -and $userPath) { $env:Path = "$machinePath;$userPath" }
+        $node = Resolve-CommandPath @("node.exe", "node")
+        if ($null -eq $node) {
+            $knownNode = Join-Path ${env:ProgramFiles} "nodejs\node.exe"
+            if (Test-Path -LiteralPath $knownNode) { $node = $knownNode }
+        }
+    }
+}
 if ($null -eq $node) {
     $bundled = Join-Path $env:USERPROFILE ".cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
     if (Test-Path -LiteralPath $bundled) { $node = $bundled }
 }
 if ($null -eq $node) {
-    throw "Node.js 22.13 or newer is required. Install it from https://nodejs.org/ and run this installer again."
+    throw "$nodeVersionHint Install it from https://nodejs.org/ and run this installer again."
 }
 $nodeVersion = [version](& $node -p "process.versions.node")
 if ($nodeVersion -lt [version]"22.13.0") {

@@ -5,18 +5,28 @@ state, tau phenotypes, and experiment planning.
 
 ## Labmate-ready distribution
 
-The fastest safe first run is the synthetic demo release. Download the ZIP,
-install Node.js 22.13 or newer, then run **Install Research OS.ps1**. It uses
-the locked dependencies, refreshes the AI navigation layer, validates the
-schema, runs the readiness checks, and creates a desktop shortcut. The demo
-vault contains no real scientific data.
+The fastest safe first run is the synthetic demo release. The public GitHub
+release has platform-friendly downloads:
+
+- [Windows one-click download](https://github.com/pierandozzimichael/Research-OS/releases/latest/download/research-os-lab-latest-windows.zip)
+  — unzip it and double-click **Install Research OS.cmd**. The installer can
+  install Node.js automatically through winget, then creates a desktop
+  shortcut.
+- [macOS/Linux download](https://github.com/pierandozzimichael/Research-OS/releases/latest/download/research-os-lab-latest-macos.tar.gz)
+  — extract it and double-click **Install Research OS.command** (or run it
+  from Terminal). Homebrew users can have the installer add Node 22 for them.
+
+Both packages contain synthetic demo records only. The installer uses the
+locked dependencies, refreshes the AI navigation, validates the schema, and
+runs the readiness checks. After installation, use the platform-specific
+**Start Research OS** launcher to open the local site.
 
 See [docs/LABMATE_QUICKSTART.md](docs/LABMATE_QUICKSTART.md) for the Windows
 install path, bounded failure behavior, and the rules for connecting a real
 lab vault. Maintainers can build the safe archive with:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\package-lab-release.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\package-lab-release.ps1 -ArchiveFormat all
 ```
 
 The package script deliberately excludes the real `vault/`, additional
