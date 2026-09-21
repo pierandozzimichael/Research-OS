@@ -1,8 +1,8 @@
 ﻿{
     "package":  "apoe-research-os",
-    "version":  "0.1.0",
+    "version":  "0.1.1",
     "profile":  "demo",
-    "generated_at":  "2026-09-21T22:57:47.4113856Z",
+    "generated_at":  "2026-09-21T22:58:34.8337989Z",
     "private_data_included":  false,
     "notes":  [
                   "This archive contains synthetic demo records only.",

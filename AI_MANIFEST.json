@@ -2,7 +2,7 @@
   "schema_version": "research-os-ai-manifest-v1",
   "application": {
     "name": "apoe-research-os",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "project_registry": {
     "path": "projects.json",
